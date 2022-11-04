@@ -9,38 +9,48 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Random;
 
-public class App {
+public class App
+{
 
-   public static void main(String[] args) {
+	public static void main(String[] args)
+	{
+		System.out.println(ApiController.getRandomQuote());
 
-       Quote[] quotes = readQuotes("JSON.json");
-       Quote randoQuote = getRandoQuote(quotes);
+//		File file = new File("quotes.JSON");
+//		System.out.println(file.getAbsolutePath());
+//		Quote[] quotes = readQuotes("quotes.json");
+//		Quote randoQuote = getRandoQuote(quotes);
+//
+//		System.out.println(randoQuote.getText());
+//		System.out.println(randoQuote.getAuthor());
+	}
 
-      System.out.println(randoQuote.getText());
-      System.out.println(randoQuote.getAuthor());
-   }
+	public static Quote getRandoQuote(Quote[] quotes)
+	{
+		Random rando = new Random();
+		int min = 0;
+		int max = quotes.length;
+		int randoNum = (int) (min + (Math.random() * (max - min)));
+		Quote randoQuote = quotes[randoNum];
 
-   public static Quote getRandoQuote(Quote[] quotes) {
-       Random rando = new Random();
-       int min = 0;
-       int max = quotes.length;
-       int randoNum = (int) (min + (Math.random() * (max - min)));
-       Quote randoQuote = quotes[randoNum];
+		return randoQuote;
+	}
 
-       return randoQuote;
-   }
+	public static Quote[] readQuotes(String path)
+	{
+		Gson chunk = new Gson();
+		Quote[] quotes;
+		FileReader newRead = null;
+		try
+		{
+			newRead = new FileReader(path);
+		}
+		catch (FileNotFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+		quotes = chunk.fromJson(newRead, Quote[].class);
 
-   public static Quote[] readQuotes(String path) {
-       Gson chunk = new Gson();
-       Quote[] quotes;
-       FileReader newRead = null;
-       try {
-           newRead = new FileReader(path);
-       } catch (FileNotFoundException e) {
-           throw new RuntimeException(e);
-       }
-       quotes = chunk.fromJson(newRead, Quote[].class);
-
-       return quotes;
-   }
+		return quotes;
+	}
 }
